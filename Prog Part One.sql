@@ -124,7 +124,7 @@ INSERT INTO dbo.Registration (ParticipantID, CategoryID, BibNumber, Registration
 
 INSERT INTO dbo.Result (RegistrationID, FinishTime, OverallRank, Status) VALUES
 (1, '00:52:34', 14, 'Finished'),
-(2, '00:58:10', 27, 'Finished'),
+(2, '00:58:10', 27, 'Finished'), 
 (4, '01:10:05', 8, 'Finished');
 
 SELECT * FROM dbo.Organiser;
