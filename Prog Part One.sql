@@ -97,7 +97,7 @@ INSERT INTO dbo.Organiser (Name, Email, Phone) VALUES
 
 INSERT INTO dbo.Participant (Name, Email, Phone, DateOfBirth, Gender) VALUES
 ('Lethabo Mokoena', 'lethabo.mokoena@example.com', '0731234567', '2001-04-12', 'Male'),
-('Naledi Dlamini', 'naledi.dlamini@example.com', '0827654321', '1998-09-23', 'Female');
+('Naledi Dlamini', 'naledi.dlamini@example.com', '0827654321', '1998-09-23', 'Female'); 
 
 INSERT INTO dbo.Event (OrganiserID, Name, Description, EventDate, Location, DistanceKm, EventType) VALUES
 (1, 'Joburg Winter 10K', 'Annual community 10km road run through Emmarentia and surrounds.', '2026-06-14', 'Emmarentia, Johannesburg', 10.00, 'Run'),
