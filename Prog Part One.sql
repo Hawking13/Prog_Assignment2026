@@ -62,4 +62,34 @@ CONSTRAINT FK_Route_Event FOREIGN KEY (EventID)
 REFERENCES dbo.Event (EventID)
 ON DELETE CASCADE );
 
+CREATE TABLE dbo.Registration (
+RegistrationID INT IDENTITY(1,1) NOT NULL,
+ParticipantID INT NOT NULL,
+CategoryID INT NOT NULL,
+BibNumber NVARCHAR(10) NOT NULL,
+RegistrationDate DATETIME NOT NULL DEFAULT GETDATE(),
+CONSTRAINT PK_Registration PRIMARY KEY (RegistrationID),
+CONSTRAINT FK_Registration_Participant FOREIGN KEY (ParticipantID)
+REFERENCES dbo.Participant (ParticipantID)
+ON DELETE CASCADE,
+CONSTRAINT FK_Registration_Category FOREIGN KEY (CategoryID)
+REFERENCES dbo.Category (CategoryID)
+ON DELETE NO ACTION,
+CONSTRAINT UQ_Registration_Participant_Category UNIQUE (ParticipantID, CategoryID),
+CONSTRAINT UQ_Registration_Bib UNIQUE (BibNumber) );
+
+CREATE TABLE dbo.Result (
+ResultID INT IDENTITY(1,1) NOT NULL,
+RegistrationID INT NOT NULL,
+FinishTime TIME(0) NULL,
+OverallRank INT NULL,
+Status NVARCHAR(20) NOT NULL DEFAULT 'Registered',
+CONSTRAINT PK_Result PRIMARY KEY (ResultID),
+CONSTRAINT FK_Result_Registration FOREIGN KEY (RegistrationID)
+REFERENCES dbo.Registration (RegistrationID)
+ON DELETE CASCADE,
+CONSTRAINT UQ_Result_Registration UNIQUE (RegistrationID),
+CONSTRAINT CK_Result_Status CHECK (Status IN ('Registered', 'Finished', 'DNF', 'DSQ')) );
+
+
 
