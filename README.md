@@ -62,5 +62,6 @@ All endpoints are also documented live in Swagger.
 
 Images 
    Tests
-<img width="1920" height="1020" alt="Screenshot 2026-10-16 134510" src="https://github.com/user-attachments/assets/f8b5f9ac-6864-44e3-964b-ceec2e38ec6e" />
+<img width="1019" height="524" alt="Screenshot 2026-10-16 181726" src="https://github.com/user-attachments/assets/0d18771f-8bd0-4674-bb91-e5f0970d1439" />
+
 
