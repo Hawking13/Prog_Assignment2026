@@ -64,4 +64,11 @@ Images
    Tests
 <img width="1019" height="524" alt="Screenshot 2026-10-16 181726" src="https://github.com/user-attachments/assets/0d18771f-8bd0-4674-bb91-e5f0970d1439" />
 
+   Swagger
+<img width="1920" height="1020" alt="Screenshot 2026-10-16 180834" src="https://github.com/user-attachments/assets/89f95182-0a39-469f-b759-4265b5c8b6c4" />
+<img width="1920" height="1020" alt="Screenshot 2026-10-16 180413" src="https://github.com/user-attachments/assets/fd406000-7faf-4bc0-8735-1bf9726064a0" />
+<img width="1638" height="386" alt="Screenshot 2026-10-16 181423" src="https://github.com/user-attachments/assets/78a0bb53-4a87-41ad-a3c4-e4340f26bd31" />
+<img width="1859" height="798" alt="Screenshot 2026-10-16 181047" src="https://github.com/user-attachments/assets/a3603e3d-b40d-4d71-b1e1-e42b3abc46c5" />
+<img width="1852" height="690" alt="Screenshot 2026-10-16 181019" src="https://github.com/user-attachments/assets/d422a98f-6f44-4e78-b5b2-a72b9b38d68a" />
+
 
