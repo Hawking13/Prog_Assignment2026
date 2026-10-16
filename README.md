@@ -36,4 +36,10 @@ POST /api/auth/register – create an Organiser (or a Participant, which also ne
 POST /api/auth/login – a session cookie is stored by the browser and sent automatically on later requests.
 Call any endpoint. Use POST /api/auth/logout to switch user.
 
+Run the unit tests
+Visual Studio: Test → Run All Tests
+Command line: dotnet test
+
+The tests start the API in memory with a temporary in-memory database, so they do not touch the SQL Server database.
+
 
