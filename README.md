@@ -28,4 +28,7 @@ Open RaceDay.Api/appsettings.json and set the connection string for your SQL Ser
 Create the database. In Package Manager Console (Default project: RaceDay.Api):
    Update-Database
 
+Set RaceDay.Api as the startup project and press F5. 
+Open https://localhost:<port>/swagger to view and test every endpoint.
+
 
