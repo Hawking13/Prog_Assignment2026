@@ -58,5 +58,6 @@ On login, the user's id and role are saved in server-side session state (cookie-
 A custom [SessionAuthorize] attribute protects endpoints: no session → 401, wrong role → 403.
 
 Endpoints
+All endpoints are also documented live in Swagger.
 
-See docs/api-endpoint-plan.md for the full plan (method, route, description, role, request body, responses). All endpoints are also documented live in Swagger.
+
