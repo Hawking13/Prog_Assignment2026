@@ -39,7 +39,19 @@ Call any endpoint. Use POST /api/auth/logout to switch user.
 Run the unit tests
 Visual Studio: Test → Run All Tests
 Command line: dotnet test
-
 The tests start the API in memory with a temporary in-memory database, so they do not touch the SQL Server database.
+
+Project structure
+RaceDay.Api/
+  Controllers/   Auth, Profile, Events, Categories, Enrolments, Results
+  Models/        Entity classes (one per table in the ERD)
+  Data/          RaceDayDbContext (EF Core configuration, keys, constraints)
+  Dtos/          Request and response shapes
+  Security/      Password hashing and session role authorisation
+RaceDay.Tests/   xUnit tests (auth, events, role access, enrolments, results)
+docs/            ERD, endpoint plan, SQL script
+.github/workflows/dotnet.yml   CI: build + test on every push
+
+
 
 
