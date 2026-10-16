@@ -31,4 +31,9 @@ Create the database. In Package Manager Console (Default project: RaceDay.Api):
 Set RaceDay.Api as the startup project and press F5. 
 Open https://localhost:<port>/swagger to view and test every endpoint.
 
+Using Swagger
+POST /api/auth/register – create an Organiser (or a Participant, which also needs dateOfBirth and gender).
+POST /api/auth/login – a session cookie is stored by the browser and sent automatically on later requests.
+Call any endpoint. Use POST /api/auth/logout to switch user.
+
 
