@@ -61,6 +61,6 @@ Endpoints
 All endpoints are also documented live in Swagger.
 
 Images 
-
+   Tests
 <img width="1920" height="1020" alt="Screenshot 2026-10-16 134510" src="https://github.com/user-attachments/assets/f8b5f9ac-6864-44e3-964b-ceec2e38ec6e" />
 
