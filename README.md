@@ -57,4 +57,6 @@ Passwords are hashed with salted PBKDF2 (SHA-256); the original password is neve
 On login, the user's id and role are saved in server-side session state (cookie-based).
 A custom [SessionAuthorize] attribute protects endpoints: no session → 401, wrong role → 403.
 
+Endpoints
 
+See docs/api-endpoint-plan.md for the full plan (method, route, description, role, request body, responses). All endpoints are also documented live in Swagger.
