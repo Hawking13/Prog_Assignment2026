@@ -52,6 +52,9 @@ RaceDay.Tests/   xUnit tests (auth, events, role access, enrolments, results)
 docs/            ERD, endpoint plan, SQL script
 .github/workflows/dotnet.yml   CI: build + test on every push
 
-
+Authentication design
+Passwords are hashed with salted PBKDF2 (SHA-256); the original password is never stored.
+On login, the user's id and role are saved in server-side session state (cookie-based).
+A custom [SessionAuthorize] attribute protects endpoints: no session → 401, wrong role → 403.
 
 
