@@ -24,3 +24,8 @@ Steps
 Clone the repository and open the solution in Visual Studio.
 Open RaceDay.Api/appsettings.json and set the connection string for your SQL Server instance:
    "ConnectionStrings": { "RaceDayDb": "Server=YOUR_SERVER;Database=RaceDayDB;Trusted_Connection=True;TrustServerCertificate=True" }
+   
+Create the database. In Package Manager Console (Default project: RaceDay.Api):
+   Update-Database
+
+
