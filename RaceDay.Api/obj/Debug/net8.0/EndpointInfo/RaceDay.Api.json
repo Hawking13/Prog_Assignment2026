@@ -630,6 +630,96 @@
         }
       }
     },
+    "/api/enrolments/{id}/status": {
+      "put": {
+        "tags": [
+          "Enrolments"
+        ],
+        "summary": "Sets an enrolment's status to Pending, Confirmed or Cancelled. Event owner only.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrolmentStatusDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrolmentStatusDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnrolmentStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnrolmentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not an Organiser, or not the owner of this event.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Enrolment not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/enrolments/{id}": {
       "delete": {
         "tags": [
@@ -689,8 +779,15 @@
         "tags": [
           "Events"
         ],
-        "summary": "Lists all events. Public. Optional filters: type, location, from (date).",
+        "summary": "Lists all events. Public. Optional filters: search (name), type, location, from (date).",
         "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "type",
             "in": "query",
@@ -771,6 +868,49 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller is not an Organiser.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/me/events": {
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Lists the logged-in Organiser's own events with enrolment totals (for the dashboard).",
+        "responses": {
+          "200": {
+            "description": "The Organiser's events, soonest first.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrganiserEventResponse"
+                  }
                 }
               }
             }
@@ -1082,6 +1222,7 @@
           "Results"
         ],
         "summary": "Captures a finish time and position for an enrolment. Event owner only.",
+        "description": "IsPublished (default true) controls whether the Participant can see the result.",
         "parameters": [
           {
             "name": "id",
@@ -1181,7 +1322,7 @@
         "tags": [
           "Results"
         ],
-        "summary": "Corrects an existing result. Event owner only.",
+        "summary": "Corrects an existing result (including publishing or hiding it). Event owner only.",
         "parameters": [
           {
             "name": "id",
@@ -1271,7 +1412,7 @@
         "tags": [
           "Results"
         ],
-        "summary": "Returns all results for an event (public leaderboard), best rank first.",
+        "summary": "Returns the results for an event, best rank first. Public sees published results only; the owning Organiser sees all.",
         "parameters": [
           {
             "name": "eventId",
@@ -1315,10 +1456,10 @@
         "tags": [
           "Results"
         ],
-        "summary": "Returns the logged-in Participant's own results.",
+        "summary": "Returns the logged-in Participant's own published results (race history), newest event first.",
         "responses": {
           "200": {
-            "description": "List of results.",
+            "description": "List of results, each with the number of finishers in that event.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1349,6 +1490,181 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/events/{id}/banner": {
+      "post": {
+        "tags": [
+          "Uploads"
+        ],
+        "summary": "Uploads a banner image for an event (stored in Azure Blob Storage). Event owner only.",
+        "description": "Send as multipart/form-data with a file field named \"file\". JPG, PNG, WEBP or GIF, max 5 MB.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Banner saved; the image URL is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing, too large, or not an image.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not an Organiser, or not the owner of this event.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Azure storage rejected the upload."
+          },
+          "503": {
+            "description": "Image storage is not configured."
+          }
+        }
+      }
+    },
+    "/api/users/me/picture": {
+      "post": {
+        "tags": [
+          "Uploads"
+        ],
+        "summary": "Uploads the logged-in Participant's profile picture (stored in Azure Blob Storage).",
+        "description": "Send as multipart/form-data with a file field named \"file\". JPG, PNG, WEBP or GIF, max 5 MB.",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              },
+              "encoding": {
+                "file": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Picture saved; the image URL is returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing, too large, or not an image.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not logged in.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Caller is not a Participant.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Azure storage rejected the upload."
+          },
+          "503": {
+            "description": "Image storage is not configured."
           }
         }
       }
@@ -1458,6 +1774,10 @@
             "type": "string",
             "nullable": true
           },
+          "eventDate": {
+            "type": "string",
+            "format": "date"
+          },
           "categoryID": {
             "type": "integer",
             "format": "int32"
@@ -1481,6 +1801,24 @@
           "registrationDate": {
             "type": "string",
             "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EnrolmentStatusDto": {
+        "required": [
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "minLength": 1,
+            "pattern": "^(Pending|Confirmed|Cancelled)$",
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1559,6 +1897,20 @@
           "eventType": {
             "type": "string",
             "nullable": true
+          },
+          "bannerUrl": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ImageUploadResponse": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1577,6 +1929,52 @@
           "password": {
             "minLength": 1,
             "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrganiserEventResponse": {
+        "type": "object",
+        "properties": {
+          "eventID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "eventDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "location": {
+            "type": "string",
+            "nullable": true
+          },
+          "distanceKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "eventType": {
+            "type": "string",
+            "nullable": true
+          },
+          "bannerUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "enrolmentCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "confirmedCount": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -1700,6 +2098,9 @@
             "pattern": "^(Registered|Finished|DNF|DSQ)$",
             "type": "string",
             "nullable": true
+          },
+          "isPublished": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -1715,11 +2116,23 @@
             "type": "integer",
             "format": "int32"
           },
+          "eventID": {
+            "type": "integer",
+            "format": "int32"
+          },
           "eventName": {
             "type": "string",
             "nullable": true
           },
+          "eventDate": {
+            "type": "string",
+            "format": "date"
+          },
           "participantName": {
+            "type": "string",
+            "nullable": true
+          },
+          "bibNumber": {
             "type": "string",
             "nullable": true
           },
@@ -1737,9 +2150,16 @@
             "format": "int32",
             "nullable": true
           },
+          "finishersCount": {
+            "type": "integer",
+            "format": "int32"
+          },
           "status": {
             "type": "string",
             "nullable": true
+          },
+          "isPublished": {
+            "type": "boolean"
           }
         },
         "additionalProperties": false
@@ -1775,6 +2195,10 @@
           "gender": {
             "type": "string",
             "nullable": true
+          },
+          "profilePictureUrl": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -1799,6 +2223,9 @@
     },
     {
       "name": "Results"
+    },
+    {
+      "name": "Uploads"
     }
   ]
 }
