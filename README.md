@@ -26,7 +26,7 @@ Enrolment statuses are colour-coded: green = Confirmed, amber = Pending, red = C
 1. Create a Storage account and a container named `raceday-images` (access level: Blob).
 2. Store the connection string as a **user secret** for the API (never commit it):
    ```
-   dotnet user-secrets set "AzureStorage:ConnectionString" "<your connection string>" --project RaceDay.Api
+   dotnet user-secrets set "AzureStorage:ConnectionString" "<DefaultEndpointsProtocol=https;AccountName=part3raceday;AccountKey=hyTLhFHuyar1tTs6DxomyAkst4sdIBUY5JpoFRVlrl/2/Hdc6NsdYfMZ+tKloFGDncVdSntBfNjT+AStAY5nAw==;EndpointSuffix=core.windows.net>" --project RaceDay.Api
    dotnet user-secrets set "AzureStorage:ContainerName" "raceday-images" --project RaceDay.Api
    ```
 3. Upload endpoints (API only): `POST /api/events/{id}/banner` (Organiser, event owner) and `POST /api/users/me/picture` (Participant). JPG, PNG, WEBP or GIF, max 5 MB.
