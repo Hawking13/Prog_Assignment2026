@@ -1,0 +1,43 @@
+@model EnrolmentsPageVm
+@{ ViewData["Title"] = "Enrolments"; }
+<div class="container py-4">
+    <a asp-action="Index" class="btn btn-link ps-0">&larr; My events</a>
+    <h1 class="rd-title">Enrolments: @Model.Event.Name</h1>
+    <p class="rd-meta">@Format.Date(Model.Event.EventDate) &middot; @Model.Event.Location &middot; @Model.Enrolments.Count enrolled</p>
+
+    @if (!Model.Enrolments.Any())
+    {
+        <div class="rd-empty">Nobody has enrolled yet.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead><tr><th>Bib</th><th>Participant</th><th>Category</th><th>Enrolled on</th><th>Status</th><th>Change status</th></tr></thead>
+                <tbody>
+                @foreach (var e in Model.Enrolments)
+                {
+                    <tr>
+                        <td>@e.BibNumber</td>
+                        <td>@e.ParticipantName</td>
+                        <td>@e.CategoryName</td>
+                        <td>@e.RegistrationDate.ToString("dd MMM yyyy")</td>
+                        <td><partial name="_StatusBadge" model="e.Status" /></td>
+                        <td>
+                            <form asp-action="SetStatus" asp-route-id="@Model.Event.EventID" asp-route-regId="@e.RegistrationID" method="post" class="d-flex gap-1">
+                                <select name="status" class="form-select form-select-sm">
+                                    @foreach (var s in new[] { "Pending", "Confirmed", "Cancelled" })
+                                    {
+                                        <option value="@s" selected="@(e.Status == s)">@s</option>
+                                    }
+                                </select>
+                                <button type="submit" class="btn btn-sm btn-outline-rd">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

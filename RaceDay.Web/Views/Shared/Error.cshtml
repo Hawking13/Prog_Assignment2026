@@ -1,0 +1,8 @@
+@model ErrorVm
+@{ ViewData["Title"] = Model.Title; }
+<div class="container py-5 text-center">
+    <div class="rd-error-code">@Model.Code</div>
+    <h1 class="rd-title">@Model.Title</h1>
+    <p class="lead text-muted">@Model.Message</p>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-rd">Back to events</a>
+</div>

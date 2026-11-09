@@ -1,0 +1,10 @@
+@model string
+@{
+    var cls = Model switch
+    {
+        "Confirmed" or "Finished" => "rd-status-green",
+        "Cancelled" or "DSQ" => "rd-status-red",
+        _ => "rd-status-amber"   // Pending, Registered, DNF
+    };
+}
+<span class="rd-status @cls">@Model</span>

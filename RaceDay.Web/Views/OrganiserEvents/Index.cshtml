@@ -1,0 +1,44 @@
+@model List<OrganiserEventDto>
+@{ ViewData["Title"] = "My events"; }
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h1 class="rd-title mb-0">My events</h1>
+        <a asp-action="Create" class="btn btn-rd">+ New event</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="rd-empty">No events yet. <a asp-action="Create">Create your first event</a></div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead><tr><th>Event</th><th>Date</th><th>Distance</th><th>Type</th><th class="text-center">Enrolments</th><th>Manage</th></tr></thead>
+                <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td><strong>@e.Name</strong><div class="small text-muted">@e.Location</div></td>
+                        <td>@Format.Date(e.EventDate)</td>
+                        <td>@e.DistanceKm.ToString("0.##") km</td>
+                        <td><span class="rd-type rd-type-@e.EventType.ToLower()">@e.EventType</span></td>
+                        <td class="text-center">@e.EnrolmentCount</td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                <a asp-action="Edit" asp-route-id="@e.EventID" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                <a asp-action="Categories" asp-route-id="@e.EventID" class="btn btn-sm btn-outline-secondary">Categories</a>
+                                <a asp-action="Enrolments" asp-route-id="@e.EventID" class="btn btn-sm btn-outline-secondary">Enrolments</a>
+                                <a asp-action="Results" asp-route-id="@e.EventID" class="btn btn-sm btn-outline-secondary">Results</a>
+                                <form asp-action="Delete" asp-route-id="@e.EventID" method="post" onsubmit="return confirm('Delete this event, its categories, enrolments and results? This cannot be undone.');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

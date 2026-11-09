@@ -1,0 +1,41 @@
+@model DashboardVm
+@{ ViewData["Title"] = "Dashboard"; }
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+        <h1 class="rd-title mb-0">Organiser dashboard</h1>
+        <a asp-controller="OrganiserEvents" asp-action="Create" class="btn btn-rd">+ New event</a>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-4"><div class="rd-stat"><div class="rd-stat-num">@Model.Events.Count</div><div>Events created</div></div></div>
+        <div class="col-sm-4"><div class="rd-stat"><div class="rd-stat-num">@Model.UpcomingCount</div><div>Upcoming events</div></div></div>
+        <div class="col-sm-4"><div class="rd-stat"><div class="rd-stat-num">@Model.TotalEnrolments</div><div>Total enrolments</div></div></div>
+    </div>
+
+    @if (!Model.Events.Any())
+    {
+        <div class="rd-empty">You have not created any events yet. <a asp-controller="OrganiserEvents" asp-action="Create">Create your first event</a></div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead><tr><th>Event</th><th>Date</th><th>Type</th><th class="text-center">Enrolments</th><th class="text-center">Confirmed</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var e in Model.Events)
+                {
+                    var past = e.EventDate < DateOnly.FromDateTime(DateTime.Today);
+                    <tr class="@(past ? "text-muted" : "")">
+                        <td><strong>@e.Name</strong><div class="small text-muted">@e.Location</div></td>
+                        <td>@Format.Date(e.EventDate) @if (past) { <span class="badge text-bg-secondary">Past</span> }</td>
+                        <td><span class="rd-type rd-type-@e.EventType.ToLower()">@e.EventType</span></td>
+                        <td class="text-center"><strong>@e.EnrolmentCount</strong></td>
+                        <td class="text-center">@e.ConfirmedCount</td>
+                        <td class="text-end"><a asp-controller="OrganiserEvents" asp-action="Enrolments" asp-route-id="@e.EventID" class="btn btn-sm btn-outline-rd">Enrolments</a></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

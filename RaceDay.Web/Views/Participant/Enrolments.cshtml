@@ -1,0 +1,34 @@
+@model List<EnrolmentDto>
+@{ ViewData["Title"] = "My enrolments"; }
+<div class="container py-4">
+    <h1 class="rd-title">My enrolments</h1>
+    @if (!Model.Any())
+    {
+        <div class="rd-empty">You have not enrolled in any events yet. <a asp-controller="Home" asp-action="Index">Browse events</a></div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead><tr><th>Event</th><th>Date</th><th>Category</th><th>Bib</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td><a asp-controller="Events" asp-action="Details" asp-route-id="@e.EventID">@e.EventName</a></td>
+                        <td>@Format.Date(e.EventDate)</td>
+                        <td>@e.CategoryName</td>
+                        <td>@e.BibNumber</td>
+                        <td><partial name="_StatusBadge" model="e.Status" /></td>
+                        <td class="text-end">
+                            <form asp-controller="Participant" asp-action="Withdraw" asp-route-id="@e.RegistrationID" method="post" onsubmit="return confirm('Withdraw from this event?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Withdraw</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

@@ -1,0 +1,15 @@
+@model EventForm
+@{ ViewData["Title"] = "New event"; }
+<div class="container py-4">
+    <div class="row justify-content-center"><div class="col-lg-8">
+        <div class="card rd-panel"><div class="card-body p-4">
+            <h1 class="rd-title">New event</h1>
+            <form asp-controller="OrganiserEvents" asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
+                <partial name="_EventFields" model="Model" />
+                <button type="submit" class="btn btn-rd">Create event</button>
+                <a asp-action="Index" class="btn btn-link">Cancel</a>
+            </form>
+        </div></div>
+    </div></div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

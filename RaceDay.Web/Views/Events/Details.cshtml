@@ -1,0 +1,88 @@
+@model EventDetailsVm
+@{
+    ViewData["Title"] = Model.Event.Name;
+    var role = Context.Session.GetString(SessionKeys.Role);
+}
+<div class="rd-banner">
+    @if (!string.IsNullOrEmpty(Model.Event.BannerUrl))
+    {
+        <img src="@Model.Event.BannerUrl" alt="Banner for @Model.Event.Name" />
+    }
+    else
+    {
+        <div class="rd-banner-placeholder"><span>@Model.Event.EventType.ToUpper()</span></div>
+    }
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <span class="rd-type rd-type-@Model.Event.EventType.ToLower()">@Model.Event.EventType</span>
+            <h1 class="rd-title mt-2">@Model.Event.Name</h1>
+            <p class="rd-meta">@Format.Date(Model.Event.EventDate) &middot; @Model.Event.Location &middot; @Model.Event.DistanceKm.ToString("0.##") km</p>
+            @if (!string.IsNullOrWhiteSpace(Model.Event.Description))
+            {
+                <p style="white-space: pre-line">@Model.Event.Description</p>
+            }
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card rd-panel">
+                <div class="card-body">
+                    <h2 class="rd-subtitle">Categories</h2>
+
+                    @if (!Model.Categories.Any())
+                    {
+                        <p class="text-muted mb-0">The organiser has not added categories yet.</p>
+                    }
+                    else if (role == "Participant" && Model.MyEnrolment == null)
+                    {
+                        <form asp-controller="Events" asp-action="Enrol" method="post">
+                            <input type="hidden" name="eventId" value="@Model.Event.EventID" />
+                            <div class="list-group mb-3">
+                                @foreach (var c in Model.Categories)
+                                {
+                                    <label class="list-group-item rd-cat">
+                                        <input class="form-check-input me-2" type="radio" name="categoryId" value="@c.CategoryID" />
+                                        <strong>@c.Name</strong>
+                                        <span class="d-block small text-muted">@c.DistanceKm.ToString("0.##") km &middot; @Format.AgeRange(c.MinAge, c.MaxAge) &middot; @c.Gender</span>
+                                    </label>
+                                }
+                            </div>
+                            <button type="submit" class="btn btn-rd w-100">Enrol for this event</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <ul class="list-group list-group-flush mb-3">
+                            @foreach (var c in Model.Categories)
+                            {
+                                <li class="list-group-item px-0">
+                                    <strong>@c.Name</strong>
+                                    <span class="d-block small text-muted">@c.DistanceKm.ToString("0.##") km &middot; @Format.AgeRange(c.MinAge, c.MaxAge) &middot; @c.Gender</span>
+                                </li>
+                            }
+                        </ul>
+                    }
+
+                    @if (role == "Participant" && Model.MyEnrolment != null)
+                    {
+                        <div class="rd-enrolled">
+                            You are enrolled in <strong>@Model.MyEnrolment.CategoryName</strong> (bib @Model.MyEnrolment.BibNumber)
+                            <partial name="_StatusBadge" model="Model.MyEnrolment.Status" />
+                        </div>
+                    }
+                    else if (role == null)
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-rd w-100">Log in to enrol</a>
+                    }
+                    else if (role == "Organiser")
+                    {
+                        <p class="small text-muted mb-0">Organisers cannot enrol in events.</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-link mt-3 ps-0">&larr; Back to events</a>
+</div>

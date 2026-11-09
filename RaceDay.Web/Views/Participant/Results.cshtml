@@ -1,0 +1,39 @@
+@model List<ResultDto>
+@{ ViewData["Title"] = "My results"; }
+<div class="container py-4">
+    <h1 class="rd-title">My results</h1>
+    @if (!Model.Any())
+    {
+        <div class="rd-empty">No results yet. Results appear here once an organiser publishes them after your event.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table rd-table align-middle">
+                <thead><tr><th>Event</th><th>Date</th><th>Category</th><th>Finish time</th><th>Position</th><th>Status</th></tr></thead>
+                <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@r.EventName</td>
+                        <td>@Format.Date(r.EventDate)</td>
+                        <td>@r.CategoryName</td>
+                        <td class="rd-time">@Format.Time(r.FinishTime)</td>
+                        <td>
+                            @if (r.OverallRank.HasValue && r.Status == "Finished")
+                            {
+                                <strong>@Format.Ordinal(r.OverallRank.Value)</strong> <span class="text-muted">out of @r.FinishersCount finishers</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">-</span>
+                            }
+                        </td>
+                        <td><partial name="_StatusBadge" model="r.Status" /></td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
