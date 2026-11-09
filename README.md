@@ -48,5 +48,4 @@ Enrolment statuses are colour-coded: green = Confirmed, amber = Pending, red = C
 | `search` filter on `GET /api/events` | Home page filtering. |
 | Earlier Part 2 changes (PasswordHash, logout, 401/409 responses) | See the Part 2 section. |
 
-(Update the ERD and SQL script in `/docs` to include the new columns, or keep this table as the explanation.
 
