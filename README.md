@@ -4,7 +4,7 @@ The ERD and Sql Code are also in the PDF
 YouTube Link: https://youtu.be/DCly89WCv1o
 
 The POE stuff is everything that is in branch 3 
-YouTube Link for part 3: https://youtu.be/a1MEb3GhZBs
+YouTube Link for part 3: https://youtu.be/P7ZVDMmEi68 (Video was changed because YouTube removed the first one)
 
 
 ## Part 3 – MVC front end, Azure Blob Storage
